@@ -1,11 +1,11 @@
 rm(list=ls())
 # Header: ----
 
-# Script name: proj008_step2_election_map_processing.R
+# Script name: proj008_step1_zone_codes_processing.R
 
-# Purpose of script: Prepare the election map processing files
+# Purpose of script:
 
-# Location of script: C:\Users\japbi\Dropbox\Data Science\3_proj\proj_008_pa_voter_rolls\2_code
+# Location of script: 
 
 # Location of project management: 
 
@@ -34,14 +34,14 @@ source("proj008_step0_workingdrives_libraries.R")
 
 # Loop ----
 
-for (iter_file in election_mapping_files) {
+for (iter_file in zone_code_files) {
   
   print(iter_file)
   
   # Loading dataset
   setwd(DATA_SRCE)
   data_iter <- read.delim(iter_file, header = FALSE) %>% 
-    purrr::set_names(election_mapping_fields) %>% 
+    purrr::set_names(zone_codes_fields) %>% 
     mutate_all(as.character) %>% clean_names()
   print("data read")
   
@@ -51,7 +51,7 @@ for (iter_file in election_mapping_files) {
   # Save dataset
   ## To Dropbox 
   setwd(DATA_PROJ)
-  write.csv(data_iter, paste0("pa_election_mapping_", county_iter,".csv"), row.names = FALSE)
+  write.csv(data_iter, paste0("pa_zone_codes_", county_iter,".csv"), row.names = FALSE)
   print("saved to Dropbox")
   ## To Google Drive
   ### Method 1: saving directly to drive folder

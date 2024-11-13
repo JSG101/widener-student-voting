@@ -1,6 +1,6 @@
 # Header ----
 #
-# Script name: proj008_step2_fve_data_processing.R
+# Script name: proj008_step1_fve_data_processing.R
 #
 # Purpose of script: Using PA voter data to find out who our real friends are
 #
