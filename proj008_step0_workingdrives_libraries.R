@@ -23,7 +23,7 @@
 
 DATA_SRCE <- "C:/Users/japbi/Dropbox/Data Science/1_raw/005_pa_voter_rolls/PA Statewide 2024-11-12"
 DATA_PROJ <- "C:/Users/japbi/Dropbox/Data Science/3_proj/proj_008_pa_voter_rolls/1_data"
-OUTPUT <- "C:/Users/japbi/Dropbox/Data Science/3_proj/proj_008_pa_voter_rolls/3_output"
+DATA_OUTPUT <- "C:/Users/japbi/Dropbox/Data Science/3_proj/proj_008_pa_voter_rolls/3_output"
 
 # Formatting and Global Options ----
 
@@ -81,3 +81,10 @@ zone_codes_fields <- c("County Name", "Zone Number", "Zone Code", "Zone Descript
 
 election_mapping_files <- list.files(DATA_SRCE, recursive = FALSE, pattern =" Election Map " )
 election_mapping_fields <- c("County Name", "Election Number", "Election Description", "Election Date")
+
+prod_voter_export_files <- list.files(DATA_PROJ, recursive = FALSE, pattern = "pa_voter_export_")
+prod_election_mapping_files <- list.files(DATA_PROJ, recursive = FALSE, pattern = "pa_election_mapping_")
+prod_zone_codes_files <- list.files(DATA_PROJ, recursive = FALSE, pattern = "pa_zone_codes_")
+prod_zone_types_files <- list.files(DATA_PROJ, recursive = FALSE, pattern = "pa_zone_types_")
+
+election_date <- ymd("2024-11-05")
