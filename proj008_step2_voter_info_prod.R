@@ -50,7 +50,7 @@ for (file_iter in prod_voter_export_files) {
   
   # Retain fields
   data_x <- data_x %>% 
-    select(id_number:custom_data_1)
+    select(id_number:custom_data_1, home_phone:registration_method)
   
   # Filters
   data_x <- data_x %>% 
