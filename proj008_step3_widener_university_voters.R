@@ -32,6 +32,12 @@ source("proj008_step0_workingdrives_libraries.R")
 
 # Functions: ----
 
+cc22_zone_code <- "49002002"
+
+student_ages <- c(18:23)
+student_streets <- c(
+  "UNIVERSITY PL", "GLEN TR", "WASHINGTON AVE", "E 16th ST", "E 14TH ST", "E 15TH ST", "MELROSE AVE", "SIEGEL ST", "MACDAM ST", "E 13TH ST"
+  )
 
 # Datasets ----
 
@@ -43,54 +49,51 @@ prod_voter_registration <- read.csv("prod_pa_voter_districts_delaware.csv") %>%
 prod_voter_participation <- read.csv("prod_pa_voter_elections_delaware.csv") %>% 
   mutate_all(as.character) %>% clean_names()
 
-# Using voter info file ----
-
-## Find all voters who participated at CC22 ----
-
-data_1 <- prod_voter_info %>% 
-  filter(precinct_code == "49002002")
-
-## Filter for voters who voted in the last election ----
-
-data_1 <- data_1 %>% 
-  filter(year(mdy(last_vote_date)) == 2024)
-
-# Using combo registration and participation files ----
-
 ## Find all voters who are registered in the district ----
 
-data_2 <- prod_voter_registration %>% 
-  filter(zone_code == "49002002") %>% 
+data_cc22 <- prod_voter_registration %>% 
+  filter(zone_code == cc22_zone_code) %>% 
   distinct(id_number)
 
-## Merge with voter participation for those who participated in the recent election ----
-# The 2024 general election does not seem to be in the dataset, so I am using the 2022 primary for now. 
+## Merge with voter participation to get the elections voters participated in ----
+# Filter it for the most recent general election for each registered voter 
 
-data_2 <- data_2 %>% 
+data_cc22 <- data_cc22 %>% 
   left_join(
     prod_voter_participation %>% 
-      filter(election_number == "22") %>% 
       select(-election_number),
     by = join_by(id_number)
-  )
+  )  %>% 
+  group_by(id_number) %>% 
+  filter(mdy(election_date) == max(mdy(election_date)) | is.na(election_date)) %>% 
+  ungroup() 
 
 ## Merge with voter info ----
 
-data_2 <- data_2 %>% 
+data_cc22 <- data_cc22 %>% 
   left_join(
     prod_voter_info,
     by= join_by(id_number)
   )
 
-## Filter for voters in a college student's age range ----
+## Flag for voters in a college student's age range ----
 
-data_2 <- data_2 %>% 
-  filter(as.numeric(voter_age) %in% c(18:22))
+data_cc22 <- data_cc22 %>% 
+  mutate(flag_student_age = ifelse(as.numeric(voter_age) %in% student_ages, 1, 0))
+table(as.numeric(data_cc22$voter_age), data_cc22$flag_student_age, useNA = "ifany")
 
-## Filter for voters on streets generally associated with college students ----
+## Flag for voters on streets generally associated with college students ----
 
+data_cc22 <- data_cc22 %>%
+  mutate(flag_student_street = ifelse(street_name %in% student_streets, 1, 0))
+table(data_cc22$street_name, data_cc22$flag_student_street, useNA = "ifany")
+
+## Create singe student flag ----
+
+data_cc22 <- data_cc22 %>% 
+  mutate(flag_student = ifelse(flag_student_age == 1 | flag_student_street == 1, 1, 0))
 
 # Save the dataset ----
 
 setwd(DATA_OUTPUT)
-write.csv(data_2, "final_widener_student_voters_2024-11.csv", row.names = FALSE)
+write.csv(data_cc22, "final_widener_student_voters_2024-11.csv", row.names = FALSE)
