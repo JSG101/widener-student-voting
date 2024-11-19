@@ -1,0 +1,39 @@
+---
+title: "Chester City 2-2 Widener University Student Voting Analysis"
+author: "Japbir Gill"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+
+rm(list=ls())
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+source("proj008_step0_workingdrives_libraries.R")
+
+voting_data <- read.csv(file.path(DATA_OUTPUT, "final_widener_student_voters_2024-11.csv"))
+
+```
+
+About elections and students
+
+About the precinct
+
+About Widener
+
+For the 2024 General Election on November 5th, 2024, Chester City 2-2 had a total of `r sum(voting_data$flag_all)` registered voters. Of these voters, `r sum(voting_data$flag_active_voter)` are considered active voters, or `r paste0(round(100*(sum(voting_data$flag_active_voter)/sum(voting_data$flag_all)),0), "%")` of all registered voters.  DESCRIBE WHAT ACTIVE VOTERS IS.
+
+Of those active voters, for whom we have demographic information on, I have estimated that there are `r sum(voting_data$flag_student)` students who are registered voters. In estimating whether a student was a voter or not, I considered two measures in the dataset: voter age and address. While the data provided by Delaware County does not indicate if a voter is a student or not, I found these to be the most appropriate proxies in determing a voter's status. 
+
+In terms of voter age, the graph below details the distribution of voters by age for the precinct. I estimated that voters between the ages of 18 and 23 are more than likely college students. 
+
+```{r voter_age, warning=FALSE, echo=FALSE}
+
+voting_data %>% 
+  filter(!is.na(voter_age)) %>%
+  ggplot(aes(x = voter_age))+
+  geom_bar()
+
+```
+
