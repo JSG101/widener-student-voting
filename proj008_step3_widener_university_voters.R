@@ -88,11 +88,20 @@ data_cc22 <- data_cc22 %>%
   mutate(flag_student_street = ifelse(street_name %in% student_streets, 1, 0))
 table(data_cc22$street_name, data_cc22$flag_student_street, useNA = "ifany")
 
-## Create singe student flag ----
+## Create single student flag ----
 
 data_cc22 <- data_cc22 %>% 
   mutate(flag_student = ifelse(flag_student_age == 1 | flag_student_street == 1, 1, 0))
 
+# Add other flags ----
+
+data_cc22 <- data_cc22 %>% 
+  mutate(
+    # base flag
+    flag_all = 1,
+    # active voters
+    flag_active_voter = ifelse(voter_status == "A", 1, 0)
+  )
 # Save the dataset ----
 
 setwd(DATA_OUTPUT)
