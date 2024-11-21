@@ -35,35 +35,43 @@ source("proj008_step0_workingdrives_libraries.R")
 # Test ----
 
 # # Load data
-# data_x <- read.csv(file.path(DATA_PROJ, "pa_voter_export_adams.csv")) %>% 
+# data_x <- read.csv(file.path(DATA_PROJ, "pa_voter_export_adams.csv")) %>%
 #   mutate_all(as.character) %>% clean_names()
 # 
 # # Retain fields
-# data_x <- data_x %>% 
+# data_x <- data_x %>%
 #   select(id_number, election_1_vote_method:election_40_party)
 # 
 # # make longer
-# data_x <- data_x %>% 
+# data_x <- data_x %>%
 #   pivot_longer(
 #     cols = starts_with("election_"),  # Selecting all columns that start with "election_"
 #     names_to = c("election_number", ".value"),  # Separate into election_number and the original name ending (vote_method or party)
 #     names_pattern = "election_(\\d+)_(.*)"  # Regex to capture the number and the field type
 #   )
 # 
-# # drop elections where the voter did not participate 
-# data_x <- data_x %>% 
+# # drop elections where the voter did not participate
+# data_x <- data_x %>%
 #   filter(!vote_method == "" & !party == "")
 # 
 # #  merge with election map datset
-# data_x <- data_x %>% 
+# data_x <- data_x %>%
 #   left_join(
-#     read.csv(file.path(DATA_PROJ, "pa_election_mapping_adams.csv")) %>% 
+#     read.csv(file.path(DATA_PROJ, "pa_election_mapping_adams.csv")) %>%
 #       mutate_all(as.character) %>% clean_names(),
 #     by = join_by(election_number)
 #   )
 # 
-# # adjusting data
+# # merge with political parties dataset 
 # data_x <- data_x %>% 
+#   left_join(
+#     read.csv(file.path(DATA_PROJ, "pa_political_parties.csv")) %>% 
+#       mutate_all(as.character) %>% clean_names(),
+#     by = join_by(party == code)
+#   )
+# 
+# # adjusting data
+# data_x <- data_x %>%
 #   mutate(
 #      # adjusting vote method
 #     vote_method = case_when(
@@ -106,8 +114,17 @@ for (file_iter in prod_voter_export_files) {
   data_x <- data_x %>% 
     left_join(
       read.csv(file.path(DATA_PROJ, paste0("pa_election_mapping_",county_iter, ".csv"))) %>% 
-        mutate_all(as.character) %>% clean_names(),
+        mutate_all(as.character) %>% clean_names() ,
       by = join_by(election_number)
+    )
+  
+  # merge with political parties dataset 
+  data_x <- data_x %>% 
+    left_join(
+      read.csv(file.path(DATA_PROJ, "pa_political_parties.csv")) %>% 
+        mutate_all(as.character) %>% clean_names() %>% 
+        rename(political_party_election = political_party_description),
+      by = join_by(party == code)
     )
   
   # adjusting data

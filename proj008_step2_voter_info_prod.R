@@ -56,6 +56,15 @@ for (file_iter in prod_voter_export_files) {
   data_x <- data_x %>% 
     filter(voter_status == "A")
   
+  # Merge with political parties dataset
+  data_x <- data_x %>% 
+    left_join(
+      read.csv(file.path(DATA_PROJ, "pa_political_parties.csv")) %>% 
+        mutate_all(as.character) %>% clean_names() %>% 
+        rename(political_party_registration = political_party_description),
+      by = join_by(party_code == code)
+    )
+  
   # Calculate fields
   data_x <- data_x %>% 
     mutate(
