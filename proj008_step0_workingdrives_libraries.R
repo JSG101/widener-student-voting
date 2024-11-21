@@ -21,7 +21,7 @@
 
 # Working Directories ----
 
-DATA_SRCE <- "C:/Users/japbi/Dropbox/Data Science/1_raw/005_pa_voter_rolls/PA Statewide 2024-11-12"
+DATA_SRCE <- "D:/Data Science/1_raw/005_pa_voter_rolls/PA Statewide 2024-11-12"
 DATA_PROJ <- "C:/Users/japbi/Dropbox/Data Science/3_proj/proj_008_pa_voter_rolls/1_data"
 DATA_OUTPUT <- "C:/Users/japbi/Dropbox/Data Science/3_proj/proj_008_pa_voter_rolls/3_output"
 
