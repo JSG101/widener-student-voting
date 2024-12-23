@@ -21,7 +21,7 @@
 
 # Working Directories ----
 
-DATA_SRCE <- "D:/Data Science/1_raw/005_pa_voter_rolls/PA Statewide 2024-11-12"
+DATA_SRCE <- "D:/Data Science/1_raw/005_pa_voter_rolls/PA Statewide 2024-12-02"
 DATA_PROJ <- "C:/Users/japbi/Dropbox/Data Science/3_proj/proj_008_pa_voter_rolls/1_data"
 DATA_OUTPUT <- "C:/Users/japbi/Dropbox/Data Science/3_proj/proj_008_pa_voter_rolls/3_output"
 
@@ -38,6 +38,7 @@ library(purrr)
 # library(googledrive)
 # gs4_auth(email = "japbir.gill@gmail.com")
 # drive_auth(email = "japbir.gill@gmail.com")
+library(ggmap)
 
 # Functions ----
 
