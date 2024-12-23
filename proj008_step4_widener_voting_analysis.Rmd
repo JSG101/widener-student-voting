@@ -1,39 +1,61 @@
 ---
-title: "Chester City 2-2 Widener University Student Voting Analysis"
+title: "Widener University Student Voting Analysis"
 author: "Japbir Gill"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
+\newpage
 
 ```{r setup, include=FALSE}
 
 rm(list=ls())
 
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-source("proj008_step0_workingdrives_libraries.R")
+# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+source(file.path(dirname(rstudioapi::getActiveDocumentContext()$path), "proj008_step0_workingdrives_libraries.R"))
 
-voting_data <- read.csv(file.path(DATA_OUTPUT, "final_widener_student_voters_2024-11.csv"))
+data_students <- read.csv(file.path(DATA_OUTPUT, "final_widener_student_voters_flags_2024-11.csv"))
+data_info <- read.csv(file.path(DATA_OUTPUT, "final_widener_student_voters_info_2024-11.csv"))
+data_participation <- read.csv(file.path(DATA_OUTPUT, "final_widener_student_voters_participation_2024-11.csv"))
+data_registration <- read.csv(file.path(DATA_OUTPUT, "final_widener_student_voters_registration_2024-11.csv"))
 
 ```
 
-About elections and students
+Through the 1960s, Americans needed to be at least 21 years old to vote. Influenced by the lowering of the military draft age to 18 in light of the Vietnam War, Congress passed an amendment to the extension of the Voting Rights Act in 1970^[https://www.nixonfoundation.org/2011/06/6-22-1970-rn-signs-the-voting-rights-act-amendments-of-1970/] guaranteeing citizens who were at least 18 years old the right to vote in federal, state, and local elections. 
 
-About the precinct
+Later that year the US Supreme Court struck down the state and local provisions of the VRA in *Oregon vs Mitchell*^[https://supreme.justia.com/cases/federal/us/400/112/] as they deemed them to be unconstitutional. Resulting from this, the 26th Amendment to the US Constitution was passed in 1971^[https://constitution.congress.gov/constitution/amendment-26/] establishing a nationally recognized standard of a minimum age of 18 for participation in all elections. 
 
-About Widener
+Thus began the push to get students involved in the elections process. As the newest voting block, college-aged students move more frequently, are less likely to have a drivers license, and are less likely to be contacted directly by political campaigns^[https://www.census.gov/library/publications/2015/acs/acs-31.html]. Voting turnout amongst this group has significantly lagged behind the national average and behind all other age groups, coming in as low as 32% in 1996 and 2000 but rebounding to as much as 48% in 2020 ^[https://www.statista.com/statistics/1096299/voter-turnout-presidential-elections-by-age-historical/]. 
 
-For the 2024 General Election on November 5th, 2024, Chester City 2-2 had a total of `r sum(voting_data$flag_all)` registered voters. Of these voters, `r sum(voting_data$flag_active_voter)` are considered active voters, or `r paste0(round(100*(sum(voting_data$flag_active_voter)/sum(voting_data$flag_all)),0), "%")` of all registered voters.  DESCRIBE WHAT ACTIVE VOTERS IS.
+The rise in voting participation for college-aged voters over the past two decades could be attributed to campus-based get out the vote activities. Whether they be driven by college dedicated resources or third parties, efforts have been made to provide college students with opportunities to register to vote. 
 
-Of those active voters, for whom we have demographic information on, I have estimated that there are `r sum(voting_data$flag_student)` students who are registered voters. In estimating whether a student was a voter or not, I considered two measures in the dataset: voter age and address. While the data provided by Delaware County does not indicate if a voter is a student or not, I found these to be the most appropriate proxies in determing a voter's status. 
+This analysis will be reviewing the participation of Widener University students in the elections process. First I will look to estimate the number of students from Widener who voted in the election. Second, I will review the voting preference and trends for these voters. This analysis is intended to be informative, but interpretations into the analysis could lead to policy implications. 
 
-In terms of voter age, the graph below details the distribution of voters by age for the precinct. I estimated that voters between the ages of 18 and 23 are more than likely college students. 
+Widener University^[www.widener.edu] is a four-year private not-for-profit school located in Chester, Pennsylvania - about 20 miles southwest of Philadelphia. Founded in 1821, the university offers degrees at associates, bachelors, masters, and doctorate levels across 60 programs. 
+
+In the Fall 2023 semester, Widener had an enrollment of 5,610, evenly split between undergraduate (associates and bachelors) and graduate (masters and doctorate) students^[https://nces.ed.gov/collegenavigator/?q=widener&s=all&id=216852]. For undergraduate students, 92% of them attend school full time, 90% are 24 years old or younger, and 78% are enrolled in exclusively on-campus courses. As for graduate students, 64% attend school full time, and  58% are enrolled in exclusively on-campus courses. 
+
+Widener is encompassed in a single voting parcel - Chester City Ward 2 Precinct 2 (CC 2/2)^[https://dcpd.maps.arcgis.com/apps/instant/lookup/index.html?appid=ac8410e97ae24f6fb942565b6014bf26&openRelatedRecords=true&find=Stetser%2520School]. This ward is borderd by Upland Street in the west, I-95 in the south, Ridley Creek on the east, and E 16th St across campus on the north. While this ward would include all students who live on campus, I also included voting data from the following neighboring wards in order to include students who live off campus: 
+ - Chester City Ward 2 Precinct 1
+ - Chester City Ward 2 Precinct 3
+ - Chester City Ward 2 Precinct 4
+ - Chester City Ward 1 Precinct 3
+ - Chester City Ward 1 Precinct 4
+ - Chester City Ward 1 Precinct 6
+ - Ridley Ward 7 Precinct 2
+ 
+ It is assumed here that Wideners students likely live in one of these voting districts, particularly if they live off campus. One blindside that this brings up are students who are registered to vote using their permanent home address. These could be students who originate from Philadelphia, Chester County, or even out of state. While these students may chose to vote at these locations for personal reasons, for this analysis, they are unfortunately uncountable. 
 
 ```{r voter_age, warning=FALSE, echo=FALSE}
 
-voting_data %>% 
+data_info %>% 
   filter(!is.na(voter_age)) %>%
   ggplot(aes(x = voter_age))+
   geom_bar()
 
 ```
 
+# Distribution of voting by election
+
+# Distribution of voting by party
+
+# Distribution of voting by election and party (sankey)
